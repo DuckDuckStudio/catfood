@@ -1,0 +1,62 @@
+[build-system]
+requires = [
+    "setuptools>=77.0.0",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "catfood"
+version = "1.0.0"
+description = "A collection of various commonly used functions. / 各种常用函数的集合。"
+readme = "README.md"
+authors = [
+    { name = "鸭鸭「カモ」" }
+]
+license = "Apache-2.0"
+license-files = [
+    "LICENSE"
+]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Natural Language :: Chinese (Simplified)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+    "colorama>=0.4.6",
+    "requests>=2.32.5",
+    "keyring>=25.6.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/DuckDuckStudio/catfood"
+Repository = "https://github.com/DuckDuckStudio/catfood"
+Issues = "https://github.com/DuckDuckStudio/catfood/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+    "catfood*"
+]
+exclude = [
+    "tests*",
+    "examples*"
+]
+
+[project.optional-dependencies]
+typing_check = [
+    "pyright"
+]
+build_and_publish = [
+    "build",
+    "twine"
+]
