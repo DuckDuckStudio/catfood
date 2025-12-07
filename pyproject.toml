@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catfood"
-version = "1.0.0"
+version = "1.0.2"
 description = "A collection of various commonly used functions. / 各种常用函数的集合。"
 readme = "README.md"
 authors = [
@@ -18,7 +18,7 @@ license-files = [
     "LICENSE"
 ]
 classifiers = [
-    "Development Status :: 1 - Planning",
+    "Development Status :: 3 - Alpha",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Natural Language :: Chinese (Simplified)",
