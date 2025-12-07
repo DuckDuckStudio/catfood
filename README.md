@@ -1,5 +1,7 @@
 # 猫粮 🐱
 
+[![Pypi 上的版本](https://img.shields.io/pypi/v/catfood.svg)](https://pypi.org/project/catfood)  
+
 各种常用函数的集合。
 
 ## 安装
@@ -7,14 +9,18 @@
 我自己仅在 CPython 3.13 (3.13.9) 测试过。  
 
 ### Pypi
+
+https://pypi.org/project/catfood/
+
 ```bash
-# https://pypi.org/project/catfood/
 pip install catfood
 ```
 
 ### Test Pypi
+
+https://test.pypi.org/project/catfood/
+
 ```bash
-# https://test.pypi.org/project/catfood/
 pip install -i https://test.pypi.org/simple/ catfood
 ```
 
