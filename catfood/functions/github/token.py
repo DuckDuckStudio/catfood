@@ -1,7 +1,7 @@
 import keyring
 from typing import cast, Any
-from functions.print import 消息头
-from functions.github.api import 请求GitHubAPI
+from ...functions.print import 消息头
+from ...functions.github.api import 请求GitHubAPI
 
 def read_token(silent: bool = False) -> str | None:
     """

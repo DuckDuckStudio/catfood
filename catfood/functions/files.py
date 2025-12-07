@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 from colorama import Fore
-from functions.print import 消息头
+from ..functions.print import 消息头
 
 def open_file(file: str) -> int:
     try:

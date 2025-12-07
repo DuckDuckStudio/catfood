@@ -1,6 +1,6 @@
 import re
 import sys
-from exceptions.operation import OperationNotSupported
+from ..exceptions.operation import OperationNotSupported
 
 def calculateCharactersDisplayed(content: str) -> int:
     """

@@ -1,7 +1,7 @@
 import base64
 import requests
 from typing import Any
-from exceptions.request import RequestException
+from ...exceptions.request import RequestException
 
 def 获取GitHub文件内容(repo: str, path: str, github_token: str | int | None = None) -> str | None:
     """
