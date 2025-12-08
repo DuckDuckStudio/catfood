@@ -13,10 +13,7 @@ def open_file(file: str) -> int:
             raise Exception("只能在 Windows 上打开目录")
 
         if sys.platform == "win32":
-            if file.endswith(".yaml"):
-                os.startfile(file)
-            else:
-                subprocess.run(["code.cmd", file], check=True)
+            os.startfile(file)
         elif sys.platform == "linux":
             try:
                 subprocess.run(["xdg-open", file], check=True)
