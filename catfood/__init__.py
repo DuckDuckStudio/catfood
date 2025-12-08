@@ -13,7 +13,7 @@ from .functions.format.github import IssueNumber, ResolvesIssue
 from .functions.github.api import 获取GitHub文件内容, 请求GitHubAPI
 from .exceptions.operation import OperationFailed, TryOtherMethods, CancelOther, OperationNotSupported
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __all__ = [
     "消息头",
     "open_file",

@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catfood"
-version = "1.0.2"
+version = "1.0.3"
 description = "A collection of various commonly used functions. / 各种常用函数的集合。"
 readme = "README.md"
 authors = [
