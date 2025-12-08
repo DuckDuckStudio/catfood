@@ -1,3 +1,9 @@
+"""
+提供一些与 GitHub Token 操作相关的函数
+
+GitHub 文档: https://docs.github.com/zh/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+"""
+
 import keyring
 from typing import cast, Any
 from ...functions.print import 消息头

@@ -1,3 +1,5 @@
+"""提供一些与文件操作相关的函数"""
+
 import os
 import sys
 import subprocess

@@ -1,3 +1,9 @@
+"""
+提供一些与 GitHub API 操作相关的函数
+
+GitHub REST API 文档: https://docs.github.com/zh/rest
+"""
+
 import base64
 import requests
 from typing import Any

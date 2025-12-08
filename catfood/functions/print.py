@@ -1,3 +1,5 @@
+"""提供一些与打印输出相关的函数和类"""
+
 from colorama import Fore
 
 class 消息头():

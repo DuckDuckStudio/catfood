@@ -1,3 +1,5 @@
+"""提供一些与终端操作相关的函数"""
+
 import re
 import sys
 from ..exceptions.operation import OperationNotSupported
