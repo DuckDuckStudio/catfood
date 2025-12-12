@@ -31,7 +31,7 @@ def IssueNumber(string: str | int | None) -> str | None:
 
     return None
 
-def ResolvesIssue(string: str) -> str | None:
+def ResolvesIssue(string: str, keyword: str = "Resolves") -> str | None:
     """
     将给定的字符串格式化为 GitHub PR 的 Resolves Issue 格式
 
@@ -39,14 +39,15 @@ def ResolvesIssue(string: str) -> str | None:
     
     :param string: 给定的字符串
     :type string: str
+    :param keyword: 链接议题时使用的关键词
+    :type keyword: str
     :return: 格式化成功返回字符串结果，失败返回 None
     :rtype: str | None
     """
 
-    num = IssueNumber(string)
+    num: str | None = IssueNumber(string)
 
     if num:
-        # TODO: 支持 Fixes 等更多前缀
-        return f"- Resolves {num}"
+        return f"- {keyword} {num}"
     else:
         return None
