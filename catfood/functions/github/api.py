@@ -6,7 +6,7 @@ GitHub REST API 文档: https://docs.github.com/zh/rest
 
 import base64
 import requests
-from typing import Any
+from typing import Any, cast
 from ...exceptions.request import RequestException
 
 def 获取GitHub文件内容(repo: str, path: str, github_token: str | int | None = None) -> str | None:
@@ -65,3 +65,32 @@ def 请求GitHubAPI(api: str, github_token: str | int | None = None) -> Any | No
         return response.json()
     except Exception:
         return None
+
+def 这是谁的Token(token: str | None) -> str | None:
+    """
+    通过 GitHub API 来确认这个 Token 是谁的
+    
+    :param token: 指定的 GitHub Token
+    :type token: str | None
+    :return: 返回 str 的所有者，失败返回 None
+    :rtype: str | None
+    """
+
+    if not isinstance(token, str):
+        return None
+    
+    token = token.strip()
+    if not token:
+        return None
+
+    response: Any | None = 请求GitHubAPI(
+        "https://api.github.com/user", token
+    )
+
+    if isinstance(response, dict):
+        response = cast(dict[str, Any], response)
+        login: Any | None = response.get("login", None)
+        if isinstance(login, str):
+            return login
+    
+    return None
