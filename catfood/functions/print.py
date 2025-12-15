@@ -18,10 +18,10 @@ class 消息头():
     内部警告 = f"{Fore.YELLOW}WARN (内部){Fore.RESET}"
     内部错误 = f"{Fore.RED}✕ (内部){Fore.RESET}"
 
-def 多行带头输出(内容: str, 头: str) -> None:
+def 多行带头输出(content: str, head: str) -> None:
     """
-    输出多行带消息头的内容。
+    输出多行带指定头的内容
     """
 
-    for 行 in 内容:
-        print(f"{头} {行}")
+    for line in content.split("\n"):
+        print(f"{head} {line}")
