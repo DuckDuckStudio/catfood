@@ -6,8 +6,8 @@ GitHub 文档: https://docs.github.com/zh/authentication/keeping-your-account-an
 
 import keyring
 from typing import Any, cast
+from warnings import deprecated
 from ...functions.print import 消息头
-from typing_extensions import deprecated
 from ...functions.github.api import 请求GitHubAPI
 
 
