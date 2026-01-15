@@ -6,14 +6,19 @@
 
 ## 安装
 
-我自己仅在 CPython 3.13 (3.13.9) 测试过。  
+我自己仅在 CPython
+
+- 3.13 (3.13.9)
+- 3.14 (3.14.2)
+
+测试过。  
 
 ### Pypi
 
 https://pypi.org/project/catfood/
 
 ```bash
-pip install catfood
+python -m pip install catfood
 ```
 
 ### Test Pypi
@@ -21,13 +26,13 @@ pip install catfood
 https://test.pypi.org/project/catfood/
 
 ```bash
-pip install -i https://test.pypi.org/simple/ catfood
+python -m pip install -i https://test.pypi.org/simple/ catfood
 ```
 
 ### 从源安装
 ```bash
 git clone https://github.com/DuckDuckStudio/catfood.git
-pip install ./catfood
+python -m pip install ./catfood
 ```
 
 #### Build whl
