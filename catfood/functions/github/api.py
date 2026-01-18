@@ -56,13 +56,10 @@ catfood.functions.github.api 的 "获取GitHub文件内容" 函数的 github_tok
 def 请求GitHubAPI(
     api: str,
     github_token: str | int | None = None,
-    params: dict[str, Any] = {},
-    headers: dict[str, Any] = {
-        "Accept": "application/vnd.github+json",
-        "User-Agent": f"DuckDuckStudio/catfood {VERSION}"
-    },
-    json: dict[str, Any] = {},
-    data: dict[str, Any] = {},
+    params: dict[str, Any] | None = None,
+    headers: dict[str, Any] | None = None,
+    json: dict[str, Any] | None = None,
+    data: dict[str, Any] | None = None,
     token: str | None = None,
     method: str = "GET",
     raiseException: bool = False
@@ -75,13 +72,13 @@ def 请求GitHubAPI(
     :param github_token: (将在 2.0.0 移除，请改用 token 参数) 请求时附带的 GitHub Token
     :type github_token: str | int | None
     :param params: 请求的参数
-    :type params: dict[str, Any]
-    :param headers: 请求头
-    :type headers: dict[str, Any]
+    :type params: dict[str, Any] | None
+    :param headers: 请求头，`None` 为默认请求头
+    :type headers: dict[str, Any] | None
     :param json: 请求附带的 json
-    :type json: dict[str, Any]
+    :type json: dict[str, Any] | None
     :param data: 请求附带的 data
-    :type data: dict[str, Any]
+    :type data: dict[str, Any] | None
     :param token: 请求使用的 GitHub Token
     :type token: str | None
     :param method: 请求使用的方法，默认为 GET
@@ -101,6 +98,13 @@ catfood.functions.github.api 的 "请求GitHubAPI" 函数的 github_token 参数
 """,
             category=DeprecationWarning
         )
+
+    # 默认值
+    if headers is None:
+        headers = {
+            "Accept": "application/vnd.github+json",
+            "User-Agent": f"DuckDuckStudio/catfood {VERSION}"
+        }
 
     if token:
         headers["Authorization"] = f"token {token}"
