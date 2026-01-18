@@ -4,6 +4,7 @@ Cat Food - A collection of various commonly used functions.
 猫粮 🐱 - 各种常用函数的集合。
 """
 
+from .constant import VERSION
 from .functions.print import 消息头
 from .functions.files import open_file
 from .exceptions.request import RequestException
@@ -13,8 +14,9 @@ from .functions.format.github import IssueNumber, ResolvesIssue
 from .functions.github.api import 获取GitHub文件内容, 请求GitHubAPI
 from .exceptions.operation import OperationFailed, TryOtherMethods, CancelOther, OperationNotSupported
 
-__version__ = "1.0.5"
+__version__ = VERSION
 __all__ = [
+    "VERSION",
     "消息头",
     "open_file",
     "calculateCharactersDisplayed",

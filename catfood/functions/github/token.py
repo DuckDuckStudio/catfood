@@ -11,7 +11,7 @@ from ...functions.print import 消息头
 from ...functions.github.api import 请求GitHubAPI
 
 
-@deprecated("请自行编写替代函数")
+@deprecated("该函数将于 catfood 2.0.0 移除，请自行编写替代函数")
 def read_token(silent: bool = False) -> str | None:
     """
     尝试从钥匙环中读取 github-access-token.glm 密钥 (aka glm 设置的 GitHub Token)
@@ -34,7 +34,7 @@ def read_token(silent: bool = False) -> str | None:
             print(f"{消息头.错误} 读取Token时出错:\n{e}")
         return None
 
-@deprecated("请改用 \"from catfood.functions.github.api import 这是谁的Token\"")
+@deprecated("该函数将于 catfood 2.0.0 移除，请改用 \"from catfood.functions.github.api import 这是谁的Token\"")
 def 这是谁的Token(token: str | None) -> str | None:
     """
     通过 GitHub API 来确认这个 Token 是谁的
@@ -53,7 +53,7 @@ def 这是谁的Token(token: str | None) -> str | None:
         return None
 
     response: Any | None = 请求GitHubAPI(
-        "https://api.github.com/user", token
+        "https://api.github.com/user", token=token
     )
 
     if isinstance(response, dict):
