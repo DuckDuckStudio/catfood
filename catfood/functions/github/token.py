@@ -4,12 +4,16 @@
 GitHub 文档: https://docs.github.com/zh/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 """
 
+import sys
 import keyring
 from typing import Any, cast
-from warnings import deprecated
 from ...functions.print import 消息头
 from ...functions.github.api import 请求GitHubAPI
 
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
 
 @deprecated("该函数将于 catfood 2.0.0 移除，请自行编写替代函数")
 def read_token(silent: bool = False) -> str | None:
