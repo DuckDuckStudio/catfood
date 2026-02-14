@@ -41,7 +41,7 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
 
                     if retry < 0:
                         return result.returncode
-                    elif retry > 0:
+                    else:
                         if command[0] == "git":
                             if not any(keyword in result.stderr.lower() for keyword in (
                                 "unable to access", "could not resolve host",
@@ -51,14 +51,15 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
                                 print(f"{消息头.警告} 这看起来像是 Git 遇到了网络之外的问题，拒绝重试")
                                 return result.returncode
 
-                        try:
-                            for i in reversed(range(1, retry+1)):
-                                print(f"\r{i}秒后重试...", end="")
-                                time.sleep(1)
-                        except KeyboardInterrupt:
-                            raise
-                        finally:
-                            print("\r", end="")
+                        if retry > 0:
+                            try:
+                                for i in reversed(range(1, retry+1)):
+                                    print(f"\r{i}秒后重试...", end="")
+                                    time.sleep(1)
+                            except KeyboardInterrupt:
+                                raise
+                            finally:
+                                print("\r", end="")
             except FileNotFoundError:
                 print(f"{消息头.错误} 未找到 {command[0]}")
                 return 1
