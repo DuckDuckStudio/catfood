@@ -17,13 +17,11 @@ def IssueNumber(string: str | int | None) -> str | None:
     elif isinstance(string, int) and (string > 0):
         return str(string)
     elif isinstance(string, str):
-        string = string.strip()
-        if (not string) or (string == "0"):
+        string = string.strip().lstrip("#").lstrip("0")
+        if (not string):
             return None
         elif string.isdigit(): # 正整数
             return string
-        elif string.startswith("#") and string[1:].isdigit():
-            return string[1:]
         elif string.startswith("https://"):
             for path in reversed(string.split("#", 1)[0].split("/")):
                 if path.isdigit():
