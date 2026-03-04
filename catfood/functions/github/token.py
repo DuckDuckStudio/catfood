@@ -5,10 +5,12 @@ GitHub 文档: https://docs.github.com/zh/authentication/keeping-your-account-an
 """
 
 import sys
-import keyring
 from typing import Any, cast
-from ...functions.print import 消息头
+
+import keyring
+
 from ...functions.github.api import 请求GitHubAPI
+from ...functions.print import 消息头
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated

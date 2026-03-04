@@ -1,7 +1,8 @@
 """提供一些异常类"""
 
+from .operation import (CancelOther, OperationFailed, OperationNotSupported,
+                        TryOtherMethods)
 from .request import RequestException
-from .operation import OperationFailed, TryOtherMethods, CancelOther, OperationNotSupported
 
 __all__ = [
     "OperationFailed",
