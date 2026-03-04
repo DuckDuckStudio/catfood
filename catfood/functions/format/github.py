@@ -20,12 +20,19 @@ def IssueNumber(string: str | int | None) -> str | None:
         string = string.strip().lstrip("#").lstrip("0")
         if (not string):
             return None
-        elif string.isdigit(): # 正整数
+        elif string.isdigit():
+            # 这里理应是已经去除前导零的正整数
+            # 因为 000 啥的会直接被 lstrip 掉
             return string
         elif string.startswith("https://"):
-            for path in reversed(string.split("#", 1)[0].split("/")):
-                if path.isdigit():
-                    return path
+            try:
+                from urllib.parse import urlparse
+                for seg in reversed(urlparse(string).path.split('/')):
+                    if seg.isdigit():
+                        if (segNum := int(seg)) > 0:
+                            return str(segNum)
+            except Exception:
+                return None
 
     return None
 
