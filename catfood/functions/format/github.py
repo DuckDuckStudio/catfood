@@ -46,6 +46,6 @@ def ResolvesIssue(string: str, keyword: str = "Resolves") -> str | None:
     num: str | None = IssueNumber(string)
 
     if num:
-        return f"- {keyword} {num}"
+        return f"- {keyword} #{num}"
     else:
         return None
