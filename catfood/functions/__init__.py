@@ -1,7 +1,7 @@
 """提供一些函数"""
 
-from .print import 消息头
 from .files import open_file
+from .print import 消息头
 from .terminal import calculateCharactersDisplayed
 
 __all__ = [

@@ -1,12 +1,15 @@
 """提供一些与终端操作相关的函数"""
 
 import re
+import subprocess
 import sys
 import time
-import subprocess
+
 from colorama import Fore
-from ..functions.print import 消息头
+
 from ..exceptions.operation import OperationNotSupported
+from ..functions.print import 消息头
+
 
 def runCommand(command: list[str] | str, retry: int = -1) -> int:
     """

@@ -1,10 +1,13 @@
 """提供一些与文件操作相关的函数"""
 
 import os
-import sys
 import subprocess
+import sys
+
 from colorama import Fore
+
 from ..functions.print import 消息头
+
 
 def open_file(file: str) -> int:
     try:

@@ -5,14 +5,15 @@ Cat Food - A collection of various commonly used functions.
 """
 
 from .constant import VERSION
-from .functions.print import 消息头
-from .functions.files import open_file
+from .exceptions.operation import (CancelOther, OperationFailed,
+                                   OperationNotSupported, TryOtherMethods)
 from .exceptions.request import RequestException
-from .functions.terminal import calculateCharactersDisplayed
-from .functions.github.token import read_token, 这是谁的Token
+from .functions.files import open_file
 from .functions.format.github import IssueNumber, ResolvesIssue
 from .functions.github.api import 获取GitHub文件内容, 请求GitHubAPI
-from .exceptions.operation import OperationFailed, TryOtherMethods, CancelOther, OperationNotSupported
+from .functions.github.token import read_token, 这是谁的Token
+from .functions.print import 消息头
+from .functions.terminal import calculateCharactersDisplayed
 
 __version__ = VERSION
 __all__ = [

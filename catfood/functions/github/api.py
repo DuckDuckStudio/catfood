@@ -5,11 +5,14 @@ GitHub REST API 文档: https://docs.github.com/zh/rest
 """
 
 import base64
-import requests
 import warnings
 from typing import Any, cast
+
+import requests
+
 from ...constant import VERSION
 from ...exceptions.request import RequestException
+
 
 def 获取GitHub文件内容(repo: str, path: str, github_token: str | int | None = None, token: str | None = None) -> str | None:
     """
