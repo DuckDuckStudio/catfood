@@ -25,7 +25,7 @@ jobs:
           python-version: 3.14.x
 
       - name: 安装依赖
-        run: pip install ".[lint]"
+        run: pip install isort
 
       - name: 运行检查
         run: isort . --check
