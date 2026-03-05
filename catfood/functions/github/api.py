@@ -44,8 +44,9 @@ catfood.functions.github.api 的 "获取GitHub文件内容" 函数的 github_tok
         if (len(repo.split("/")) < 2) or (len(repo.split("/")) > 3):
             raise ValueError("指定的仓库格式不对")
         
+        normalized_path = path.replace("\\", "/")
         response = 请求GitHubAPI(
-            f"https://api.github.com/repos/{repo}/contents/{path.replace("\\", "/")}",
+            f"https://api.github.com/repos/{repo}/contents/{normalized_path}",
             token=token
         )
 
