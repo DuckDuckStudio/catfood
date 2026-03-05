@@ -1,0 +1,31 @@
+name: isort check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  isort-check:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONIOENCODING: utf-8
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v6
+
+      - name: 配置 Python
+        uses: actions/setup-python@v6.1.0
+        with:
+          python-version: 3.14.x
+
+      - name: 安装依赖
+        run: pip install ".[lint]"
+
+      - name: 运行检查
+        run: isort . --check
