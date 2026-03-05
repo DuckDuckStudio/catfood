@@ -1,0 +1,44 @@
+name: Pytest
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  pytest:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        python-version:
+          - 3.10.x
+          - 3.11.x
+          - 3.12.x
+          - 3.13.x
+          - 3.14.x
+    env:
+      PYTHONIOENCODING: utf-8
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v6
+
+      - name: 配置 Python
+        uses: actions/setup-python@v6.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: 安装依赖
+        run: pip install ".[test]"
+
+      - name: 运行 Pytest
+        run: pytest -vv
