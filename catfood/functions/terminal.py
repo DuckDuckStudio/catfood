@@ -40,7 +40,7 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
                 if result.returncode == 0:
                     return 0
                 else:
-                    print(f"{消息头.错误} 运行 {Fore.BLUE}{" ".join(command)}{Fore.RESET} 失败，{command[0]} 返回非零退出代码 {Fore.BLUE}{result.returncode}{Fore.RESET}")
+                    print(f"{消息头.错误} 运行 {Fore.BLUE}{' '.join(command)}{Fore.RESET} 失败，{command[0]} 返回非零退出代码 {Fore.BLUE}{result.returncode}{Fore.RESET}")
 
                     if retry < 0:
                         return result.returncode
@@ -69,7 +69,7 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
 
             print(f"{消息头.信息} 正在重试 ...")
     except KeyboardInterrupt:
-        print(f"{消息头.错误} 终止运行命令 {Fore.BLUE}{" ".join(command)}{Fore.RESET}，因为收到了 Ctrl + C (KeyboardInterrupt)")
+        print(f"{消息头.错误} 终止运行命令 {Fore.BLUE}{' '.join(command)}{Fore.RESET}，因为收到了 Ctrl + C (KeyboardInterrupt)")
         raise KeyboardInterrupt
 
 def calculateCharactersDisplayed(content: str) -> int:
