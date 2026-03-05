@@ -55,10 +55,18 @@ exclude = [
     "examples*"
 ]
 
+[tool.pytest.ini_options]
+testpaths = "tests"
+addopts = "--cov catfood"
+
 [project.optional-dependencies]
 lint = [
     "pyright",
     "isort"
+]
+test = [
+    "pytest",
+    "pytest-cov"
 ]
 build_and_publish = [
     "build",
