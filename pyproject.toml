@@ -61,8 +61,15 @@ exclude = [
 testpaths = "tests"
 addopts = "--cov catfood"
 
+[tool.pylint.main]
+disable = [
+    "invalid-name", # C0103
+    "non-ascii-name", # C2401
+]
+
 [project.optional-dependencies]
 lint = [
+    "pylint",
     "pyright",
     "isort"
 ]
