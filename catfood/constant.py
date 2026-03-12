@@ -4,7 +4,7 @@
 
 from typing import Final
 
-VERSION: Final = "2.0.0"
+VERSION: Final = "2.1.0"
 """
 catfood 的版本。
 """
