@@ -54,6 +54,10 @@ def test_请求GitHubAPI_headers_and_token(monkeypatch: pytest.MonkeyPatch):
     assert "Authorization" in called["headers"]
     assert called["headers"]["Authorization"] == "token 好吃的"
 
+def test_请求GitHubAPI_wrong_api_version():
+    with pytest.raises(ValueError):
+        catfood.functions.github.api.请求GitHubAPI("999", api_version="123") # pyright: ignore[reportArgumentType]
+
 def test_这是谁的Token_success(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(catfood.functions.github.api, "请求GitHubAPI", lambda *a, **k: {"login": "樱羽艾玛"}) # pyright: ignore[reportUnknownLambdaType, reportUnknownArgumentType]
     assert catfood.functions.github.api.这是谁的Token("abc") == "樱羽艾玛"

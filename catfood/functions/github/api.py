@@ -5,7 +5,7 @@ GitHub REST API 文档: https://docs.github.com/zh/rest
 """
 
 import base64
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 import requests
 
@@ -30,7 +30,7 @@ def 获取GitHub文件内容(repo: str, path: str, token: str | None = None) -> 
     try:
         if (len(repo.split("/")) < 2) or (len(repo.split("/")) > 3):
             raise ValueError("指定的仓库格式不对")
-        
+
         normalized_path = path.replace("\\", "/")
         response = 请求GitHubAPI(
             f"https://api.github.com/repos/{repo}/contents/{normalized_path}",
@@ -43,7 +43,7 @@ def 获取GitHub文件内容(repo: str, path: str, token: str | None = None) -> 
         return base64.b64decode(response["content"]).decode("utf-8")
     except Exception:
         return None
-    
+
 def 请求GitHubAPI(
     api: str,
     params: dict[str, Any] | None = None,
@@ -52,6 +52,7 @@ def 请求GitHubAPI(
     data: dict[str, Any] | None = None,
     token: str | None = None,
     method: str = "GET",
+    api_version: Literal["2022-11-28", "2026-03-10"] = "2026-03-10",
     raiseException: bool = False
 ) -> Any | None:
     """
@@ -71,17 +72,23 @@ def 请求GitHubAPI(
     :type token: str | None
     :param method: 请求使用的方法，默认为 GET
     :type method: str
+    :param api_version: 请求时 `X-GitHub-Api-Version` 指定的 GitHub API 版本。有关 GitHub API 版本信息请参考 https://docs.github.com/zh/rest/about-the-rest-api/api-versions
+    :type api_version: Literal["2022-11-28", "2026-03-10"]
     :param raiseException: 在捕获到异常时是否直接 `raise` 出来
     :type raiseException: bool
     :return: 返回 `.json()` 后的响应。捕获到异常且 `raiseException` 为 `False` 时返回 None。
     :rtype: Any | None
     """
 
+    if api_version not in ["2022-11-28", "2026-03-10"]:
+        raise ValueError("不正确的 GitHub API 版本")
+
     # 默认值
     if headers is None:
         headers = {
             "Accept": "application/vnd.github+json",
-            "User-Agent": f"DuckDuckStudio/catfood {VERSION}"
+            "User-Agent": f"DuckDuckStudio/catfood {VERSION}",
+            "X-GitHub-Api-Version": api_version
         }
 
     if token:
@@ -109,7 +116,7 @@ def 这是谁的Token(token: str | None) -> str | None:
 
     if not isinstance(token, str):
         return None
-    
+
     token = token.strip()
     if not token:
         return None
@@ -124,5 +131,5 @@ def 这是谁的Token(token: str | None) -> str | None:
         login: Any | None = response.get("login", None)
         if isinstance(login, str):
             return login
-    
+
     return None
