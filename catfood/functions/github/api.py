@@ -52,6 +52,7 @@ def 请求GitHubAPI(
     data: dict[str, Any] | None = None,
     token: str | None = None,
     method: str = "GET",
+    timeout: int = 10,
     api_version: Literal["2022-11-28", "2026-03-10"] = "2026-03-10",
     raiseException: bool = False
 ) -> Any | None:
@@ -72,6 +73,8 @@ def 请求GitHubAPI(
     :type token: str | None
     :param method: 请求使用的方法，默认为 GET
     :type method: str
+    :param timeout: 请求超时的时间（秒）
+    :type timeout: int
     :param api_version: 请求时 `X-GitHub-Api-Version` 指定的 GitHub API 版本。有关 GitHub API 版本信息请参考 https://docs.github.com/zh/rest/about-the-rest-api/api-versions
     :type api_version: Literal["2022-11-28", "2026-03-10"]
     :param raiseException: 在捕获到异常时是否直接 `raise` 出来
@@ -95,7 +98,15 @@ def 请求GitHubAPI(
         headers["Authorization"] = f"token {token}"
 
     try:
-        response = requests.request(method=method, url=api, params=params, headers=headers, json=json, data=data)
+        response = requests.request(
+            method=method,
+            url=api,
+            params=params,
+            headers=headers,
+            json=json,
+            data=data,
+            timeout=timeout
+        )
         response.raise_for_status()
         return response.json()
     except Exception:
