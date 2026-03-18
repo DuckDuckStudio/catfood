@@ -25,7 +25,7 @@ https://test.pypi.org/project/catfood/
 python -m pip install -i https://test.pypi.org/simple/ catfood
 ```
 
-## 其他语言的 catfood
+## 其他语言的猫粮
 ### C#
 
 > .NET 10
