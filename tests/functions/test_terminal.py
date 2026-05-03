@@ -1,5 +1,5 @@
 import sys
-from typing import NoReturn
+from typing import Literal, NoReturn
 
 import pytest
 
@@ -8,7 +8,7 @@ from catfood.functions.print import 消息头
 
 
 def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
-    def dummy_run(cmd: list[str], capture_output: bool, text: bool):
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         class Result:
             returncode = 0
             stdout: str = "你所热爱的，就是你的生活。"
@@ -21,7 +21,7 @@ def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.Capt
     assert out == ("你所热爱的，就是你的生活。" + '\n')
 
 def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
-    def dummy_run(cmd: list[str], capture_output: bool, text: bool):
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         class Result:
             returncode = 1
             stdout = ""
@@ -35,7 +35,7 @@ def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: py
     assert "Ciallo" in out
 
 def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
-    def dummy_run(cmd: list[str], capture_output: bool, text: bool):
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         class Result:
             returncode = 128
             stdout: str = ""
@@ -50,7 +50,7 @@ def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, cap
 
 def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
     call_count: int = 0
-    def dummy_run(cmd: list[str], capture_output: bool, text: bool):
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         nonlocal call_count
         call_count += 1
         class Result:
@@ -67,7 +67,7 @@ def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys:
     assert 消息头.信息 in out
 
 def test_runCommand_FileNotFound(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
-    def dummy_run(cmd: list[str], capture_output: bool, text: bool) -> NoReturn:
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]) -> NoReturn:
         raise FileNotFoundError()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
     ret: int = terminal.runCommand(["notfound"])
@@ -77,7 +77,7 @@ def test_runCommand_FileNotFound(monkeypatch: pytest.MonkeyPatch, capsys: pytest
     assert "未找到" in out
 
 def test_runCommand_keyboard_interrupt(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
-    def dummy_run(cmd: list[str], capture_output: bool, text: bool) -> NoReturn:
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]) -> NoReturn:
         raise KeyboardInterrupt()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
     with pytest.raises(KeyboardInterrupt):
