@@ -83,7 +83,7 @@ def calculateCharactersDisplayed(content: str) -> int:
     :return: 显示所占的字数
     :rtype: int
     """
-    
+
     if (sys.platform != "win32"):
         raise OperationNotSupported("calculateCharactersDisplayed 仅在 Windows 终端中可用")
 
