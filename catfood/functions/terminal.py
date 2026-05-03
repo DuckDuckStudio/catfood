@@ -38,30 +38,30 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
 
             if result.returncode == 0:
                 return 0
-            else:
-                print(f"{消息头.错误} 运行 {Fore.BLUE}{' '.join(command)}{Fore.RESET} 失败，{command[0]} 返回非零退出代码 {Fore.BLUE}{result.returncode}{Fore.RESET}")
 
-                if retry < 0:
+            print(f"{消息头.错误} 运行 {Fore.BLUE}{' '.join(command)}{Fore.RESET} 失败，{command[0]} 返回非零退出代码 {Fore.BLUE}{result.returncode}{Fore.RESET}")
+
+            if retry < 0:
+                return result.returncode
+
+            if command[0] == "git":
+                if not any(keyword in result.stderr.lower() for keyword in (
+                    "unable to access", "could not resolve host",
+                    "failed to connect", "operation timed out",
+                    "early eof", "rpc failed"
+                )):
+                    print(f"{消息头.警告} 这看起来像是 Git 遇到了网络之外的问题，拒绝重试")
                     return result.returncode
-                else:
-                    if command[0] == "git":
-                        if not any(keyword in result.stderr.lower() for keyword in (
-                            "unable to access", "could not resolve host",
-                            "failed to connect", "operation timed out",
-                            "early eof", "rpc failed"
-                        )):
-                            print(f"{消息头.警告} 这看起来像是 Git 遇到了网络之外的问题，拒绝重试")
-                            return result.returncode
 
-                    if retry > 0:
-                        try:
-                            for i in reversed(range(1, retry+1)):
-                                print(f"\r{i}秒后重试...", end="")
-                                time.sleep(1)
-                        finally:
-                            print("\r", end="")
+            if retry > 0:
+                try:
+                    for i in reversed(range(1, retry+1)):
+                        print(f"\r{i}秒后重试...", end="")
+                        time.sleep(1)
+                finally:
+                    print("\r", end="")
 
-                    print(f"{消息头.信息} 正在重试 ...")
+            print(f"{消息头.信息} 正在重试 ...")
         except FileNotFoundError:
             print(f"{消息头.错误} 未找到 {command[0]}")
             return 1
