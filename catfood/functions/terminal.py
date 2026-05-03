@@ -30,7 +30,7 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
 
     while True:
         try:
-            result = subprocess.run(command, capture_output=True, text=True)
+            result = subprocess.run(command, capture_output=True, text=True, check=False)
             if result.stdout.strip():
                 print(result.stdout.strip())
             if result.stderr.strip():
