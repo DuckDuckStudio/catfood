@@ -59,8 +59,6 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
                                 for i in reversed(range(1, retry+1)):
                                     print(f"\r{i}秒后重试...", end="")
                                     time.sleep(1)
-                            except KeyboardInterrupt:
-                                raise
                             finally:
                                 print("\r", end="")
             except FileNotFoundError:
