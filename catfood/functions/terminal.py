@@ -68,9 +68,9 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
                 return 1
 
             print(f"{消息头.信息} 正在重试 ...")
-    except KeyboardInterrupt:
+    except KeyboardInterrupt as e:
         print(f"{消息头.错误} 终止运行命令 {Fore.BLUE}{' '.join(command)}{Fore.RESET}，因为收到了 Ctrl + C (KeyboardInterrupt)")
-        raise KeyboardInterrupt
+        raise KeyboardInterrupt from e
 
 def calculateCharactersDisplayed(content: str) -> int:
     """
