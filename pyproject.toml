@@ -62,10 +62,21 @@ exclude = [
 testpaths = "tests"
 addopts = "--cov catfood"
 
-[tool.pylint.main]
+[tool.pylint.MAIN]
+max-line-length = 200
 disable = [
-    "invalid-name", # C0103
+    "broad-exception-caught", # W0718
+    # 文档
+    "missing-module-docstring", # C0114
+    "missing-function-docstring", # C0116
+    # 非 ASCII 字符
     "non-ascii-name", # C2401
+    "non-ascii-module-import", # C2403
+    # lazy import
+    "import-outside-toplevel", # C0415
+    # 风格问题
+    "superfluous-parens", # C0325
+    "invalid-name", # C0103
 ]
 
 [project.optional-dependencies]
