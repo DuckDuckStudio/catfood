@@ -6,6 +6,9 @@ import pytest
 import catfood.functions.github.api
 
 
+def raise_exc(**kwargs) -> NoReturn: # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
+    raise Exception("测试异常")
+
 def test_获取GitHub文件内容_success(monkeypatch: pytest.MonkeyPatch):
     mock_response: dict[str, str] = {"content": "aGVsbG8gd29ybGQ="}
     monkeypatch.setattr(catfood.functions.github.api, "请求GitHubAPI", lambda api, token: mock_response) # pyright: ignore[reportUnknownLambdaType, reportUnknownArgumentType]
@@ -19,8 +22,7 @@ def test_获取GitHub文件内容_no_response(monkeypatch: pytest.MonkeyPatch):
     assert catfood.functions.github.api.获取GitHub文件内容("owner/repo", "README.md") is None
 
 def test_获取GitHub文件内容_exception(monkeypatch: pytest.MonkeyPatch):
-    def raise_exc(api: str, token: str | None = None) -> NoReturn: raise Exception("我不是专业养鸭的，但是我知道，遇到鸭的时候，你慢慢靠近，让它感觉你没有恶意，然后轻轻抚摸鸭头，正常它是不会咬你的，如果它咬你了，就当我没说，毕竟开头我也说了，我不是专业的。")
-    monkeypatch.setattr(catfood.functions.github.api, "请求GitHubAPI", raise_exc)
+    monkeypatch.setattr(catfood.functions.github.api, "请求GitHubAPI", raise_exc) # pyright: ignore[reportUnknownArgumentType]
     assert catfood.functions.github.api.获取GitHub文件内容("owner/repo", "README.md") is None
 
 def test_请求GitHubAPI_success(monkeypatch: pytest.MonkeyPatch):
@@ -31,13 +33,11 @@ def test_请求GitHubAPI_success(monkeypatch: pytest.MonkeyPatch):
     assert catfood.functions.github.api.请求GitHubAPI("http://api.github.com/", token="abc") == {"呐": "吸铁石"}
 
 def test_请求GitHubAPI_raises(monkeypatch: pytest.MonkeyPatch):
-    def raise_exc(**kwargs) -> NoReturn: raise Exception("抱歉，今天不行。") # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
     monkeypatch.setattr(catfood.functions.github.api.requests, "request", raise_exc) # pyright: ignore[reportUnknownArgumentType]
     with pytest.raises(Exception):
         catfood.functions.github.api.请求GitHubAPI("http://api.github.com/", raiseException=True)
 
 def test_请求GitHubAPI_returns_none_on_exception(monkeypatch: pytest.MonkeyPatch):
-    def raise_exc(**kwargs) -> NoReturn: raise Exception("都过年了，不要再讨论什么音游了。你带你的理论值回到家并不能给你带来任何实质性作用，朋友们兜里掏出一大把钱购物旅行，你默默的在家里推分。亲戚朋友吃饭问你收获了什么，你说我收了首歌，亲戚们懵逼了，你还在心里默默嘲笑他们，笑他们不懂你的手法，理论达成的那一刻的自豪，也笑他们对于音游的认知只是钢琴块。你父母的同事都在说自己的子女一年的收获，儿子升职加薪了，女儿结婚了，姑娘生了个可爱的宝宝，你的父母默默无言，说我的儿子在对着板子戳戳戳，家里平板屏幕越来越烂了。时间流逝，一年又一年，你还在想着下一个章节的魔王出来了，继续推新的谱面，而你身边的人在考虑买什么豪车、去哪个度假胜地，你还在纠结你的破音游。") # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
     monkeypatch.setattr(catfood.functions.github.api.requests, "request", raise_exc) # pyright: ignore[reportUnknownArgumentType]
     assert catfood.functions.github.api.请求GitHubAPI("http://api.github.com/") is None
 
