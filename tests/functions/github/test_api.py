@@ -7,7 +7,7 @@ import catfood.functions.github.api
 
 
 def raise_exc(**kwargs) -> NoReturn: # pyright: ignore[reportMissingParameterType, reportUnknownParameterType]
-    raise Exception("测试异常")
+    raise Exception("测试异常") # pylint: disable=broad-exception-raised / W0719
 
 def test_获取GitHub文件内容_success(monkeypatch: pytest.MonkeyPatch):
     mock_response: dict[str, str] = {"content": "aGVsbG8gd29ybGQ="}

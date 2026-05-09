@@ -1,3 +1,5 @@
+# pylint: disable=unused-argument / W0613, missing-class-docstring / C0115, too-few-public-methods / R0903
+
 import sys
 from typing import Literal, NoReturn
 
