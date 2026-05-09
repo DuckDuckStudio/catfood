@@ -70,9 +70,10 @@ disable = [
 
 [project.optional-dependencies]
 lint = [
+    "ruff",
+    "isort",
     "pylint",
-    "pyright",
-    "isort"
+    "pyright"
 ]
 test = [
     "pytest",
