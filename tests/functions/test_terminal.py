@@ -72,13 +72,17 @@ def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, cap
     assert 消息头.警告 in out
 
 @pytest.mark.parametrize(
-    "arg",
+    "arg, retry",
     [
-        ["git", "pull"],
-        "git pull"
+        # 等待一定时间后重试
+        (["git", "pull"], 1),
+        ("git pull", 1),
+        # 立即重试
+        (["git", "pull"], 0),
+        ("git pull", 0)
     ]
 )
-def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
+def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str, retry: int):
     call_count: int = 0
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         nonlocal call_count
@@ -90,7 +94,7 @@ def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys:
         return Result()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
     monkeypatch.setattr(terminal.time, "sleep", lambda x: None) # pyright: ignore[reportUnknownLambdaType, reportUnknownArgumentType]
-    ret: int = terminal.runCommand(arg, retry=1)
+    ret: int = terminal.runCommand(arg, retry=retry)
     out: str = capsys.readouterr().out
     assert ret == 0
     assert 消息头.错误 in out
