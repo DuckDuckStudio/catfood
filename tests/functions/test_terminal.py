@@ -9,7 +9,14 @@ from catfood.functions import terminal
 from catfood.functions.print import 消息头
 
 
-def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "arg",
+    [
+        ["fcm", "get"],
+        "fcm get"
+    ]
+)
+def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         class Result:
             returncode = 0
@@ -17,23 +24,10 @@ def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.Capt
             stderr: str = ""
         return Result()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
-    ret: int = terminal.runCommand(["fcm", "get"])
+    ret: int = terminal.runCommand(arg)
     out: str = capsys.readouterr().out
     assert ret == 0
-    assert out == ("你所热爱的，就是你的生活。" + '\n')
-
-def test_runCommand_success_str(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
-    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
-        class Result:
-            returncode = 0
-            stdout: str = "大家一定要警惕身份证与无料的区别，不要把身份证当无料发了"
-            stderr: str = ""
-        return Result()
-    monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
-    ret: int = terminal.runCommand("fcm get")
-    out: str = capsys.readouterr().out
-    assert ret == 0
-    assert out == ("大家一定要警惕身份证与无料的区别，不要把身份证当无料发了" + '\n')
+    assert out == "你所热爱的，就是你的生活。\n"
 
 def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
