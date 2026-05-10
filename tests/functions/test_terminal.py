@@ -74,15 +74,24 @@ def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, cap
 @pytest.mark.parametrize(
     "arg, retry",
     [
+        ## Git
         # 等待一定时间后重试
         (["git", "pull"], 1),
         ("git pull", 1),
         # 立即重试
         (["git", "pull"], 0),
-        ("git pull", 0)
+        ("git pull", 0),
+
+        ## 其他
+        # 等待一定时间后重试
+        (["fcm", "get"], 1),
+        ("fcm get", 1),
+        # 立即重试
+        (["fcm", "get"], 0),
+        ("fcm get", 0),
     ]
 )
-def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str, retry: int):
+def test_runCommand_failure_retry(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str, retry: int):
     call_count: int = 0
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         nonlocal call_count
