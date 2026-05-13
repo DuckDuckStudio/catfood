@@ -53,6 +53,31 @@ def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: py
 @pytest.mark.parametrize(
     "arg",
     [
+        ["fcm", "get"],
+        "fcm get"
+    ]
+)
+def test_runCommand_failure_no_out(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
+    """
+    https://github.com/DuckDuckStudio/catfood/issues/43
+    """
+
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
+        class Result:
+            returncode = 1
+            stdout = None
+            stderr = None
+        return Result()
+    monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
+    ret = terminal.runCommand(arg, retry=-1)
+    out = capsys.readouterr().out
+    assert ret == 1
+    assert 消息头.错误 in out
+    assert "fcm" in out
+
+@pytest.mark.parametrize(
+    "arg",
+    [
         ["git", "status"],
         "git status"
     ]
