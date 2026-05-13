@@ -31,9 +31,10 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
     while True:
         try:
             result = subprocess.run(command, capture_output=True, text=True, check=False)
-            if result.stdout.strip():
+            # 这两个输出可能为 None，见 #42 / #43
+            if result.stdout:
                 print(result.stdout.strip())
-            if result.stderr.strip():
+            if result.stderr:
                 print(result.stderr.strip())
 
             if result.returncode == 0:
