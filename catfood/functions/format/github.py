@@ -27,12 +27,15 @@ def IssueNumber(string: str | int | None) -> str | None:
         elif string.startswith("https://"):
             try:
                 from urllib.parse import urlparse
-                for seg in reversed(urlparse(string).path.split('/')):
-                    if seg.isdigit():
-                        if (segNum := int(seg)) > 0:
-                            return str(segNum)
-            except Exception:
+            except ImportError:
                 return None
+
+            for seg in reversed(urlparse(string).path.split('/')):
+                try:
+                    if (seg_num := int(seg)) > 0:
+                        return str(seg_num)
+                except ValueError:
+                    continue
 
     return None
 
