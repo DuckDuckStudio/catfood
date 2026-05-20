@@ -6,10 +6,16 @@ from catfood.functions.format.github import IssueNumber, ResolvesIssue
 @pytest.mark.parametrize(
     "input_value,expected",
     [
+        # 无效输入
         (None, None),
         ("", None),
         (0, None),
         (-1, None),
+        ("#000", None),
+        ("#notanumber", None),
+        ("abc", None),
+        ("https://github.com/owner/repo/issues/", None),
+        # 有效输入
         (123, "123"),
         ("123", "123"),
         ("#123", "123"),
@@ -19,11 +25,6 @@ from catfood.functions.format.github import IssueNumber, ResolvesIssue
         ("https://github.com/owner/repo/issues/456", "456"),
         ("https://github.com/owner/repo/pull/789", "789"),
         ("https://github.com/owner/repo/issues/000789", "789"),
-        ("https://github.com/owner/repo/issues/notanumber", None),
-        ("#notanumber", None),
-        ("abc", None),
-        ("#000", None),
-        ("https://github.com/owner/repo/issues/", None),
         ("https://github.com/owner/repo/issues/123#discussion", "123"),
         ("https://github.com/owner/repo/issues/123#issuecomment-456", "123"),
     ]
