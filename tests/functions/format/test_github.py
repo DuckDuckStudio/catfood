@@ -15,6 +15,7 @@ from catfood.functions.format.github import IssueNumber, ResolvesIssue
         ("#notanumber", None),
         ("abc", None),
         ("https://github.com/owner/repo/issues/", None),
+        ("https://github.com/owner/repo/issues/₁", None),
         # 有效输入
         (123, "123"),
         ("123", "123"),
