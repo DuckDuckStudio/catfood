@@ -1,3 +1,5 @@
+# pylint: disable=unused-argument / W0613, missing-class-docstring / C0115, too-few-public-methods / R0903
+
 import sys
 from typing import Literal, NoReturn
 
@@ -7,7 +9,14 @@ from catfood.functions import terminal
 from catfood.functions.print import 消息头
 
 
-def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "arg",
+    [
+        ["fcm", "get"],
+        "fcm get"
+    ]
+)
+def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         class Result:
             returncode = 0
@@ -15,25 +24,19 @@ def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.Capt
             stderr: str = ""
         return Result()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
-    ret: int = terminal.runCommand(["fcm", "get"])
+    ret: int = terminal.runCommand(arg)
     out: str = capsys.readouterr().out
     assert ret == 0
-    assert out == ("你所热爱的，就是你的生活。" + '\n')
+    assert out == "你所热爱的，就是你的生活。\n"
 
-def test_runCommand_success_str(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
-    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
-        class Result:
-            returncode = 0
-            stdout: str = "大家一定要警惕身份证与无料的区别，不要把身份证当无料发了"
-            stderr: str = ""
-        return Result()
-    monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
-    ret: int = terminal.runCommand("fcm get")
-    out: str = capsys.readouterr().out
-    assert ret == 0
-    assert out == ("大家一定要警惕身份证与无料的区别，不要把身份证当无料发了" + '\n')
-
-def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "arg",
+    [
+        ["fcm", "get"],
+        "fcm get"
+    ]
+)
+def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         class Result:
             returncode = 1
@@ -41,13 +44,45 @@ def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: py
             stderr = "error"
         return Result()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
-    ret = terminal.runCommand(["Ciallo"], retry=-1)
+    ret = terminal.runCommand(arg, retry=-1)
     out = capsys.readouterr().out
     assert ret == 1
     assert 消息头.错误 in out
-    assert "Ciallo" in out
+    assert "fcm" in out
 
-def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "arg",
+    [
+        ["fcm", "get"],
+        "fcm get"
+    ]
+)
+def test_runCommand_failure_no_out(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
+    """
+    https://github.com/DuckDuckStudio/catfood/issues/43
+    """
+
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
+        class Result:
+            returncode = 1
+            stdout = None
+            stderr = None
+        return Result()
+    monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
+    ret = terminal.runCommand(arg, retry=-1)
+    out = capsys.readouterr().out
+    assert ret == 1
+    assert 消息头.错误 in out
+    assert "fcm" in out
+
+@pytest.mark.parametrize(
+    "arg",
+    [
+        ["git", "status"],
+        "git status"
+    ]
+)
+def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         class Result:
             returncode = 128
@@ -55,13 +90,33 @@ def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, cap
             stderr: str = "fatal: not a git repository"
         return Result()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
-    ret: int = terminal.runCommand(["git", "status"], retry=30)
+    ret: int = terminal.runCommand(arg, retry=30)
     out: str = capsys.readouterr().out
     assert ret == 128
     assert 消息头.错误 in out
     assert 消息头.警告 in out
 
-def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "arg, retry",
+    [
+        ## Git
+        # 等待一定时间后重试
+        (["git", "pull"], 1),
+        ("git pull", 1),
+        # 立即重试
+        (["git", "pull"], 0),
+        ("git pull", 0),
+
+        ## 其他
+        # 等待一定时间后重试
+        (["fcm", "get"], 1),
+        ("fcm get", 1),
+        # 立即重试
+        (["fcm", "get"], 0),
+        ("fcm get", 0),
+    ]
+)
+def test_runCommand_failure_retry(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str, retry: int):
     call_count: int = 0
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
         nonlocal call_count
@@ -73,28 +128,42 @@ def test_runCommand_failure_git_network(monkeypatch: pytest.MonkeyPatch, capsys:
         return Result()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
     monkeypatch.setattr(terminal.time, "sleep", lambda x: None) # pyright: ignore[reportUnknownLambdaType, reportUnknownArgumentType]
-    ret: int = terminal.runCommand(["git", "pull"], retry=1)
+    ret: int = terminal.runCommand(arg, retry=retry)
     out: str = capsys.readouterr().out
     assert ret == 0
     assert 消息头.错误 in out
     assert 消息头.信息 in out
 
-def test_runCommand_FileNotFound(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "arg",
+    [
+        ["fcm", "get"],
+        "fcm get"
+    ]
+)
+def test_runCommand_FileNotFound(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]) -> NoReturn:
         raise FileNotFoundError()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
-    ret: int = terminal.runCommand(["notfound"])
+    ret: int = terminal.runCommand(arg)
     out: str = capsys.readouterr().out
     assert ret == 1
     assert 消息头.错误 in out
     assert "未找到" in out
 
-def test_runCommand_keyboard_interrupt(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "arg",
+    [
+        ["fcm", "get"],
+        "fcm get"
+    ]
+)
+def test_runCommand_keyboard_interrupt(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], arg: list[str] | str):
     def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]) -> NoReturn:
         raise KeyboardInterrupt()
     monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
     with pytest.raises(KeyboardInterrupt):
-        terminal.runCommand(["TEmPTaTiON"])
+        terminal.runCommand(arg)
     out: str = capsys.readouterr().out
     assert 消息头.错误 in out
     assert "KeyboardInterrupt" in out
