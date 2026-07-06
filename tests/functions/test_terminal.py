@@ -168,6 +168,48 @@ def test_runCommand_keyboard_interrupt(monkeypatch: pytest.MonkeyPatch, capsys: 
     assert 消息头.错误 in out
     assert "KeyboardInterrupt" in out
 
+def test_runCommand_max_retry_0(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+    """不重试"""
+    call_count: int = 0
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
+        nonlocal call_count
+        call_count += 1
+        class Result:
+            returncode = 1
+            stdout = ""
+            stderr = "error"
+        return Result()
+    monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
+    ret = terminal.runCommand("fcm get", retry=0, max_retry=0)
+    out = capsys.readouterr().out
+    assert ret == 1
+    assert 消息头.错误 in out
+    assert "fcm" in out
+    assert "已达到最大重试次数" in out
+    # 当 max_retry=0 时，不应进行重试，运行次数为 1
+    assert call_count == 1
+
+def test_runCommand_max_retry_1(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+    """重试一次"""
+    call_count: int = 0
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
+        nonlocal call_count
+        call_count += 1
+        class Result:
+            returncode: int = 1
+            stdout: str = ""
+            stderr: str = "unable to access"
+        return Result()
+    monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
+    ret = terminal.runCommand("fcm get", retry=0, max_retry=1)
+    out = capsys.readouterr().out
+    assert ret == 1
+    assert 消息头.错误 in out
+    assert "fcm" in out
+    assert "已达到最大重试次数" in out
+    # 允许重试一次，应调用两次
+    assert call_count == 2
+
 def test_calculateCharactersDisplayed_win(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(sys, "platform", "win32")
     # 仅 ASCII
