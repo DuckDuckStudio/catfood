@@ -11,22 +11,28 @@ from ..exceptions.operation import OperationNotSupported
 from ..functions.print import 消息头
 
 
-def runCommand(command: list[str] | str, retry: int = -1) -> int:
+def runCommand(command: list[str] | str, retry: int = -1, max_retry: int = -1) -> int:
     """
     运行指定命令，并允许设置自动重试。
 
     拒绝重试 git 因非网络错误导致的失败。
-    
-    :param command: 需要运行的命令
-    :type command: list[str] | str
-    :param retry: 重试前的等待时间，-1 表示不重试
-    :type retry: int
-    :return: 退出代码
-    :rtype: int
+
+    Args:
+        command: 需要运行的命令
+        retry: 重试前的等待时间。-1 表示不重试；0 表示立即重试
+        max_retry: 
+            最大重试次数。-1 表示不限重试次数；0 表示不重试（等同于 `retry=-1`）
+
+            注意这是重试次数不是运行次数，运行次数要 +1。
+
+    Returns:
+        退出代码
     """
 
     if isinstance(command, str):
         command = command.split(" ")
+
+    retry_count = 0
 
     while True:
         try:
@@ -54,6 +60,10 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
                     print(f"{消息头.警告} 这看起来像是 Git 遇到了网络之外的问题，拒绝重试")
                     return result.returncode
 
+            if max_retry == retry_count:
+                print(f"{消息头.错误} 已达到最大重试次数")
+                return result.returncode
+
             if retry > 0:
                 try:
                     for i in reversed(range(1, retry+1)):
@@ -62,6 +72,7 @@ def runCommand(command: list[str] | str, retry: int = -1) -> int:
                 finally:
                     print("\r", end="")
 
+            retry_count += 1
             print(f"{消息头.信息} 正在重试 ...")
         except FileNotFoundError:
             print(f"{消息头.错误} 未找到 {command[0]}")
