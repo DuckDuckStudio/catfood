@@ -82,8 +82,7 @@ disable = [
 lint = [
     "ruff",
     "isort",
-    "pylint",
-    "pyright"
+    "pylint"
 ]
 test = [
     "pytest",
