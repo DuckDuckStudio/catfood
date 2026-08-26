@@ -3,13 +3,14 @@
 import os
 import subprocess
 import sys
+from typing import Literal
 
 from colorama import Fore
 
 from ..functions.print import 消息头
 
 
-def open_file(file: str) -> int:
+def open_file(file: str) -> Literal[0, 1]:
     try:
         if not os.path.exists(file):
             raise FileNotFoundError(f"未找到 {file}")
