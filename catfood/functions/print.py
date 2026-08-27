@@ -3,7 +3,7 @@
 from colorama import Fore
 
 
-class 消息头():
+class 消息头:
     # 特殊
     消息 = f"{Fore.BLUE}[!]{Fore.RESET}"
     问题 = f"{Fore.BLUE}?{Fore.RESET}"
