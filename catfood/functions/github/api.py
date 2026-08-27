@@ -16,7 +16,7 @@ from ...exceptions.request import RequestException
 def 获取GitHub文件内容(repo: str, path: str, token: str | None = None) -> str | None:
     """
     尝试通过 GitHub API 获取文本文件 base64，解码后返回。
-    
+
     :param repo: 文件所在的仓库，应为 `owner/repo` 的格式
     :type repo: str
     :param path: 需要获取的文件在仓库中的相对路径
@@ -57,7 +57,7 @@ def 请求GitHubAPI(
 ) -> Any | None:
     """
     向指定的 GitHub API 发送请求，返回 `.json()` 后的响应内容
-    
+
     :param api: 指定的 GitHub API 链接
     :type api: str
     :param params: 请求的参数
@@ -107,7 +107,7 @@ def 请求GitHubAPI(
 def 这是谁的Token(token: str | None) -> str | None:
     """
     通过 GitHub API 来确认这个 Token 是谁的
-    
+
     :param token: 指定的 GitHub Token
     :type token: str | None
     :return: 返回 str 的所有者，失败返回 None

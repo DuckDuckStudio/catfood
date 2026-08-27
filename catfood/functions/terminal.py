@@ -20,7 +20,7 @@ def runCommand(command: list[str] | str, retry: int = -1, max_retry: int = -1) -
     Args:
         command: 需要运行的命令
         retry: 重试前的等待时间。-1 表示不重试；0 表示立即重试
-        max_retry: 
+        max_retry:
             最大重试次数。-1 表示不限重试次数；0 表示不重试（等同于 `retry=-1`）
 
             注意这是重试次数不是运行次数，运行次数要 +1。
@@ -86,7 +86,7 @@ def calculateCharactersDisplayed(content: str) -> int:
     计算内容在 Windows 终端上显示占多少字符的位置。
 
     方法请参阅我的文章: https://duckduckstudio.github.io/Articles/#/信息速查/Python/输出/计算输出的内容在Windows终端上的显示占多少字符
-    
+
     :param content: 指定的内容
     :type content: str
     :return: 显示所占的字数
