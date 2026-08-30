@@ -29,6 +29,23 @@ def test_runCommand_success(monkeypatch: pytest.MonkeyPatch, capsys: pytest.Capt
     assert ret == 0
     assert out == "你所热爱的，就是你的生活。\n"
 
+
+def test_runCommand_string_quoted_argument(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
+    """带空格的参数应作为单个参数传递给 subprocess.run。"""
+
+    def dummy_run(cmd: list[str], capture_output: Literal[True], text: Literal[True], check: Literal[False]):
+        assert cmd == ["fcm", "add", "你好 世界"]
+
+        class Result:
+            returncode = 0
+            stdout: str = ""
+            stderr: str = ""
+        return Result()
+
+    monkeypatch.setattr(terminal.subprocess, "run", dummy_run)
+    ret = terminal.runCommand('fcm add "你好 世界"')
+    assert ret == 0
+
 @pytest.mark.parametrize(
     "arg",
     [

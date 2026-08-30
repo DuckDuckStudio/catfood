@@ -1,6 +1,7 @@
 """提供一些与终端操作相关的函数"""
 
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -30,7 +31,7 @@ def runCommand(command: list[str] | str, retry: int = -1, max_retry: int = -1) -
     """
 
     if isinstance(command, str):
-        command = command.split(" ")
+        command = shlex.split(command)
 
     retry_count = 0
 
