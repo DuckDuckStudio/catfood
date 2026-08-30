@@ -78,6 +78,14 @@ disable = [
     "invalid-name", # C0103
 ]
 
+[dependency-groups]
+sphinx = [
+    "myst-parser==5.1.0; python_version >= '3.11'",
+    "myst-parser<=5.1.0; python_version < '3.11'",
+    "sphinx==9.1.0; python_version >= '3.12'",
+    "sphinx<=9.1.0; python_version < '3.12'",
+]
+
 [project.optional-dependencies]
 lint = [
     "ruff",
