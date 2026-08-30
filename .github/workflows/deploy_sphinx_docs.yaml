@@ -1,0 +1,66 @@
+name: 向 GitHub Page 部署 Sphinx 文档
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "docs/"
+      - "catfood/"
+
+# 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Page
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 只允许一次并发部署，跳过正在进行的运行和最新排队的运行之间的排队运行。
+# 但是，不要取消正在进行的运行，因为我们希望允许这些生产部署完成。
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # 单个部署任务，因为我们只是部署
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    env:
+      LANG: "zh_CN.UTF-8"
+    steps:
+      - name: 签出
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: 设置 Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+
+      - name: 安装 Python 依赖
+        shell: bash
+        run: |-
+          python -m pip install --upgrade pip
+          pip install "." --group "sphinx"
+
+      - name: 生成 html 页面
+        shell: bash
+        run: |-
+          cd docs
+          make html
+          cd ..
+
+      - name: 设置页面
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: 上传工件
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: "docs/build/html/"
+
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
