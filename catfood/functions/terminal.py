@@ -9,7 +9,7 @@ import time
 from colorama import Fore
 
 from ..exceptions.operation import OperationNotSupported
-from ..functions.print import 消息头
+from ..functions.print import MSHead
 
 
 def runCommand(command: list[str] | str, retry: int = -1, max_retry: int = -1) -> int:
@@ -50,7 +50,7 @@ def runCommand(command: list[str] | str, retry: int = -1, max_retry: int = -1) -
                 return 0
 
             print(
-                f"{消息头.错误} 运行 {Fore.BLUE}{' '.join(command)}{Fore.RESET} 失败，{command[0]} 返回非零退出代码 {Fore.BLUE}{result.returncode}{Fore.RESET}"
+                f"{MSHead.Error} 运行 {Fore.BLUE}{' '.join(command)}{Fore.RESET} 失败，{command[0]} 返回非零退出代码 {Fore.BLUE}{result.returncode}{Fore.RESET}"
             )
 
             if retry < 0:
@@ -69,11 +69,11 @@ def runCommand(command: list[str] | str, retry: int = -1, max_retry: int = -1) -
                     )
                 )
             ):
-                print(f"{消息头.警告} 这看起来像是 Git 遇到了网络之外的问题，拒绝重试")
+                print(f"{MSHead.Warning} 这看起来像是 Git 遇到了网络之外的问题，拒绝重试")
                 return result.returncode
 
             if max_retry == retry_count:
-                print(f"{消息头.错误} 已达到最大重试次数")
+                print(f"{MSHead.Error} 已达到最大重试次数")
                 return result.returncode
 
             if retry > 0:
@@ -85,13 +85,13 @@ def runCommand(command: list[str] | str, retry: int = -1, max_retry: int = -1) -
                     print("\r", end="")
 
             retry_count += 1
-            print(f"{消息头.信息} 正在重试 ...")
+            print(f"{MSHead.Information} 正在重试 ...")
         except FileNotFoundError:
-            print(f"{消息头.错误} 未找到 {command[0]}")
+            print(f"{MSHead.Error} 未找到 {command[0]}")
             return 1
         except KeyboardInterrupt as e:
             print(
-                f"{消息头.错误} 终止运行命令 {Fore.BLUE}{' '.join(command)}{Fore.RESET}，因为收到了 Ctrl + C (KeyboardInterrupt)"
+                f"{MSHead.Error} 终止运行命令 {Fore.BLUE}{' '.join(command)}{Fore.RESET}，因为收到了 Ctrl + C (KeyboardInterrupt)"
             )
             raise KeyboardInterrupt from e
 
