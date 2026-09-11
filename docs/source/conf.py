@@ -9,7 +9,7 @@
 project = "catfood"
 copyright = "2026-%Y, 鸭鸭「カモ」"  # pylint: disable=redefined-builtin / W0622
 author = "鸭鸭「カモ」"
-release = version = "2.2.2"
+release = version = "2.3.0"
 
 # -- 一般配置 -----------------------------------------------------
 # https://www.sphinx-doc.org/zh-cn/master/usage/configuration.html#general-configuration
