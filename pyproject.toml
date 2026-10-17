@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catfood"
-version = "2.2.1"
+version = "2.3.0"
 description = "A collection of various commonly used functions. / 各种常用函数的集合。"
 readme = "README.md"
 authors = [
@@ -40,7 +40,8 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
     "colorama>=0.4.6",
-    "requests>=2.32.5"
+    "requests>=2.32.5",
+    "typing_extensions; python_version < '3.13'",
 ]
 
 [project.urls]
@@ -69,14 +70,19 @@ disable = [
     # 文档
     "missing-module-docstring", # C0114
     "missing-function-docstring", # C0116
-    # 非 ASCII 字符
-    "non-ascii-name", # C2401
-    "non-ascii-module-import", # C2403
     # lazy import
     "import-outside-toplevel", # C0415
     # 风格问题
     "superfluous-parens", # C0325
     "invalid-name", # C0103
+]
+
+[dependency-groups]
+sphinx = [
+    "myst-parser==5.1.0; python_version >= '3.11'",
+    "myst-parser<=5.1.0; python_version < '3.11'",
+    "sphinx==9.1.0; python_version >= '3.12'",
+    "sphinx<=9.1.0; python_version < '3.12'",
 ]
 
 [project.optional-dependencies]

@@ -6,7 +6,7 @@ from typing import Literal, NoReturn
 import pytest
 
 from catfood.functions import terminal
-from catfood.functions.print import 消息头
+from catfood.functions.print import MSHead
 
 
 @pytest.mark.parametrize(
@@ -64,7 +64,7 @@ def test_runCommand_failure_no_retry(monkeypatch: pytest.MonkeyPatch, capsys: py
     ret = terminal.runCommand(arg, retry=-1)
     out = capsys.readouterr().out
     assert ret == 1
-    assert 消息头.错误 in out
+    assert MSHead.Error in out
     assert "fcm" in out
 
 @pytest.mark.parametrize(
@@ -89,7 +89,7 @@ def test_runCommand_failure_no_out(monkeypatch: pytest.MonkeyPatch, capsys: pyte
     ret = terminal.runCommand(arg, retry=-1)
     out = capsys.readouterr().out
     assert ret == 1
-    assert 消息头.错误 in out
+    assert MSHead.Error in out
     assert "fcm" in out
 
 @pytest.mark.parametrize(
@@ -110,8 +110,8 @@ def test_runCommand_failure_git_non_network(monkeypatch: pytest.MonkeyPatch, cap
     ret: int = terminal.runCommand(arg, retry=30)
     out: str = capsys.readouterr().out
     assert ret == 128
-    assert 消息头.错误 in out
-    assert 消息头.警告 in out
+    assert MSHead.Error in out
+    assert MSHead.Warning in out
 
 @pytest.mark.parametrize(
     "arg, retry",
@@ -148,8 +148,8 @@ def test_runCommand_failure_retry(monkeypatch: pytest.MonkeyPatch, capsys: pytes
     ret: int = terminal.runCommand(arg, retry=retry)
     out: str = capsys.readouterr().out
     assert ret == 0
-    assert 消息头.错误 in out
-    assert 消息头.信息 in out
+    assert MSHead.Error in out
+    assert MSHead.Information in out
 
 @pytest.mark.parametrize(
     "arg",
@@ -165,7 +165,7 @@ def test_runCommand_FileNotFound(monkeypatch: pytest.MonkeyPatch, capsys: pytest
     ret: int = terminal.runCommand(arg)
     out: str = capsys.readouterr().out
     assert ret == 1
-    assert 消息头.错误 in out
+    assert MSHead.Error in out
     assert "未找到" in out
 
 @pytest.mark.parametrize(
@@ -182,7 +182,7 @@ def test_runCommand_keyboard_interrupt(monkeypatch: pytest.MonkeyPatch, capsys: 
     with pytest.raises(KeyboardInterrupt):
         terminal.runCommand(arg)
     out: str = capsys.readouterr().out
-    assert 消息头.错误 in out
+    assert MSHead.Error in out
     assert "KeyboardInterrupt" in out
 
 def test_runCommand_max_retry_0(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]):
@@ -200,7 +200,7 @@ def test_runCommand_max_retry_0(monkeypatch: pytest.MonkeyPatch, capsys: pytest.
     ret = terminal.runCommand("fcm get", retry=0, max_retry=0)
     out = capsys.readouterr().out
     assert ret == 1
-    assert 消息头.错误 in out
+    assert MSHead.Error in out
     assert "fcm" in out
     assert "已达到最大重试次数" in out
     # 当 max_retry=0 时，不应进行重试，运行次数为 1
@@ -221,7 +221,7 @@ def test_runCommand_max_retry_1(monkeypatch: pytest.MonkeyPatch, capsys: pytest.
     ret = terminal.runCommand("fcm get", retry=0, max_retry=1)
     out = capsys.readouterr().out
     assert ret == 1
-    assert 消息头.错误 in out
+    assert MSHead.Error in out
     assert "fcm" in out
     assert "已达到最大重试次数" in out
     # 允许重试一次，应调用两次
